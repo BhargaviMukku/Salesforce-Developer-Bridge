@@ -1,70 +1,91 @@
-# 🚀 Salesforce Interview Readiness Bootcamp – Day 2
+# 🚀 Salesforce Developer Bridge Program – Day 1
 
-## Apex Triggers & Governor Limits
+## About This Learning Session
 
-## About This Bootcamp
+Day 1 of the Salesforce Developer Bridge Program was designed to strengthen my core Salesforce development skills through both theory and hands-on practice. Throughout the session, I explored the complete development workflow—from designing a data model to writing Apex code, querying records with SOQL, building Apex Triggers, and creating my first Lightning Web Component (LWC).
 
-On Day 2 of the Salesforce Interview Readiness Bootcamp, I focused on understanding **Apex Triggers** and how they are used to automate business processes in Salesforce. I also learned why Governor Limits are important and how to write efficient, bulkified code that follows Salesforce best practices.
-
-As part of the assignment, I worked on a real-world Placement Management System scenario where I implemented business rules using an Apex Trigger. The goal was to validate student applications, prevent duplicate records, and automatically update application status while ensuring the code could handle bulk data efficiently.
+The training emphasized solving real business problems rather than simply learning syntax. I also learned how to write efficient Salesforce code by understanding Governor Limits, bulkification techniques, collections, and asynchronous processing. These concepts helped me understand how enterprise Salesforce applications are built to handle large amounts of data while maintaining good performance.
 
 ---
 
 ## What I Learned
 
-During this session, I learned:
+During this learning session, I covered the following topics:
 
-- What an Apex Trigger is
-- Difference between Before Trigger and After Trigger
-- When to use Validation Rules, Flow, and Triggers
-- Trigger Context Variables
-- Governor Limits and why they exist
-- Bulkification techniques
-- Using Lists, Sets, and Maps in Apex
+- Salesforce Data Modeling
+- Standard Objects and Custom Objects
+- Lookup and Master-Detail Relationships
+- Apex Programming Basics
+- Apex Classes and Variables
+- SOQL Queries
+- Apex Triggers
 - Trigger Handler Pattern
-- Writing clean and maintainable Apex code
+- Collections (List, Set, and Map)
+- Governor Limits
+- Bulkification
+- Asynchronous Apex
+- Future Methods
+- Queueable Apex (Introduction)
+- Lightning Web Components (LWC)
+- Parent-to-Child and Child-to-Parent Communication
+- Debugging and Best Practices
 
 ---
 
 ## Hands-on Activities
 
-As part of the practical assignment, I:
+As part of the practical exercises, I:
 
-- Created an **ApplicationTrigger**
-- Prevented duplicate job applications
-- Validated student CGPA against job eligibility
-- Checked application deadlines
-- Automatically assigned the status as **"Applied"**
-- Added meaningful validation error messages
-- Bulkified the trigger using Lists, Sets, and Maps
-- Analyzed and improved inefficient trigger code
+- Designed a custom Salesforce data model
+- Created custom objects and established relationships
+- Practiced Apex programming using Execute Anonymous
+- Wrote different types of SOQL queries, including relationship and aggregate queries
+- Built Apex Triggers with a separate Trigger Handler class
+- Implemented duplicate record validation
+- Learned how to use Lists, Sets, and Maps effectively
+- Optimized trigger logic using bulkification techniques
+- Created a simple Future Method for asynchronous processing
+- Built basic Lightning Web Components
+- Implemented communication between parent and child LWC components
+- Tested and debugged code using the Salesforce Developer Console
 
 ---
 
 ## Key Takeaways
 
-One of the biggest lessons I learned was that a trigger should not only satisfy business requirements but also be designed to handle large amounts of data efficiently. I understood why SOQL and DML statements should never be placed inside loops and how bulkification helps applications stay within Salesforce Governor Limits.
+One of the biggest lessons I learned is that writing code is only a part of Salesforce development. Designing scalable, reusable, and efficient solutions is equally important.
 
-I also learned that choosing between a Validation Rule, Flow, and Trigger depends on the business requirement, and that Apex should only be used when declarative tools cannot solve the problem.
+I understood why Governor Limits exist and how bulkification helps applications process multiple records efficiently without hitting platform limits. Learning collections such as Lists, Sets, and Maps made it easier to write optimized Apex code.
+
+I also explored how Lightning Web Components provide a modern user interface while Apex handles business logic and data processing. Together, these technologies form the foundation of Salesforce application development.
 
 ---
 
 ## Skills Gained
 
+- Salesforce Data Modeling
+- Apex Programming
+- SOQL
 - Apex Triggers
-- Trigger Context Variables
+- Trigger Handler Pattern
+- Collections (List, Set, and Map)
 - Governor Limits
 - Bulkification
-- Lists, Sets, and Maps
-- Trigger Handler Pattern
-- Business Logic Implementation
-- Salesforce Best Practices
+- Asynchronous Apex
+- Future Methods
+- Lightning Web Components (LWC)
+- Component Communication
+- Debugging
+- Problem Solving
+- Salesforce Development Best Practices
 
 ---
 
 ## Outcome
 
-After completing Day 2, I gained confidence in writing bulk-safe Apex Triggers that automate business processes while following Salesforce best practices. This session also improved my understanding of trigger architecture and prepared me for explaining trigger concepts confidently during Salesforce interviews.
+By completing Day 1, I developed a strong foundation in Salesforce development. I gained practical experience in designing data models, writing Apex code, querying Salesforce data, building triggers, optimizing code using bulkification, working with asynchronous Apex, and creating basic Lightning Web Components.
+
+This learning session improved my understanding of Salesforce architecture and prepared me for implementing more advanced features in future projects.
 
 ---
 
