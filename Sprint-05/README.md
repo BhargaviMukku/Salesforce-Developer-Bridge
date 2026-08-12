@@ -1,159 +1,349 @@
-# 🚀 Salesforce Sprint 5 – SOQL & DML Fundamentals
+# Sprint 5 – Retrieving and Managing Information with SOQL and DML
 
-## 📖 Overview
+## Overview
 
-This repository contains my learning notes and engineering exercises from **Sprint 5 – Retrieving and Managing Information with SOQL and DML**.
+In Sprint 5, I learned how Salesforce applications communicate with data using **SOQL (Salesforce Object Query Language)** and **DML (Data Manipulation Language)**.
 
-During this sprint, I learned how Salesforce applications retrieve, create, and update data using **SOQL (Salesforce Object Query Language)** and **DML (Data Manipulation Language)**. I also explored how professional Salesforce developers combine Apex, SOQL, and DML to build complete business transactions while following enterprise development best practices.
+The main principle of this sprint was:
 
----
+> **Retrieve first. Decide afterwards.**
 
-## 🎯 Learning Objectives
-
-By completing this sprint, I learned to:
-
-- Understand the importance of data in enterprise applications
-- Retrieve Salesforce records using SOQL
-- Create and update records using DML
-- Build complete business transactions
-- Retrieve only the required information
-- Apply business validations before modifying data
-- Design reusable and maintainable Apex services
-- Improve application performance using efficient queries
+Before a software application can make a business decision, it needs to retrieve the correct information from Salesforce.
 
 ---
 
-## 📚 Topics Covered
+## Topics Covered
 
-### 📖 Understanding Data
-
-- Importance of business data
-- Information-driven decision making
-- Enterprise data management
-- Business requirements analysis
-
----
-
-### 🔍 SOQL (Salesforce Object Query Language)
-
-- Query Salesforce records
-- Retrieve required fields
-- Filter records
-- Business-oriented queries
-- Query optimization
-- Data retrieval best practices
+* Understanding data requirements
+* SOQL
+* Retrieving Salesforce records
+* Identifying objects and fields
+* Business questions and queries
+* DML
+* Creating and updating Salesforce records
+* Data-driven business decisions
+* SOQL and DML in Salesforce applications
 
 ---
 
-### ✏️ DML (Data Manipulation Language)
+## What I Learned
 
-- Insert Records
-- Update Records
-- Delete Records
-- Create Business Transactions
-- Data Modification
-- Business Validation
+### 1. Data Before Decisions
 
----
+I learned that software cannot make good decisions without first finding the required information.
 
-### ⚙️ Business Transaction Flow
+For the Placement Management System, the application may need information such as:
 
-Complete application workflow:
+* Student CGPA
+* Branch
+* Active Backlogs
+* Graduation Year
+* Job Eligibility
+* Application Deadline
+* Existing Applications
+* Number of Current Offers
 
-```
-Receive Request
-      ↓
-Retrieve Student
-      ↓
-Retrieve Job
-      ↓
-Check Duplicate
-      ↓
-Validate Eligibility
-      ↓
-Create Application
-      ↓
-Save Record
-      ↓
-Display Confirmation
+The important workflow is:
+
+```text
+Retrieve Information
+        ↓
+Make Decision
 ```
 
 ---
 
-### 🏗 Engineering Concepts
+### 2. Data as a Business Asset
 
-- Retrieve data before making decisions
-- Validate business rules
-- Prevent duplicate applications
-- Create new application records
-- Update existing records
-- Display meaningful user feedback
-- Separate business logic from data access
-- Improve maintainability
+I learned that Salesforce records are not just database rows. They represent meaningful business information.
 
----
+For example:
 
-### 💡 Apex Integration
+* A Student record represents academic information and career opportunities.
+* A Job record represents an employment opportunity.
+* An Application record represents a student's application for a job.
 
-- Apex Classes
-- SOQL Queries
-- DML Statements
-- Business Logic
-- Service Classes
-- Enterprise Coding Practices
+Understanding why the information matters helps in deciding what data needs to be retrieved.
 
 ---
 
-## 🛠 Skills Developed
+# SOQL
 
-- Salesforce Apex
-- SOQL
-- DML
-- Business Logic Design
-- Data Retrieval
-- Record Management
-- Service Layer Architecture
-- Enterprise Software Development
-- Clean Code Practices
+## What is SOQL?
 
----
+**SOQL** stands for **Salesforce Object Query Language**.
 
-## ✅ Best Practices Learned
+SOQL is used to retrieve information from Salesforce.
 
-- Retrieve only the required fields.
-- Every SOQL query should answer a business question.
-- Validate business rules before performing DML operations.
-- Avoid unnecessary queries and fields.
-- Keep business logic clean and reusable.
-- Build complete business transactions step by step.
-- Write maintainable and scalable Apex code.
+I learned to think of SOQL as a way of asking Salesforce a precise question.
+
+For example:
+
+```text
+What are the details of this student?
+```
+
+Before writing a query, I should identify:
+
+1. The Salesforce object.
+2. The required fields.
+3. The condition used to identify the required record.
 
 ---
 
-## 📌 Sprint Outcome
+## Basic SOQL Structure
 
-By completing Sprint 5, I gained practical knowledge of working with Salesforce data using SOQL and DML. I learned how to retrieve information, validate business rules, create and update records, and combine Apex, SOQL, and DML to build complete enterprise business transactions following Salesforce best practices.
+```apex
+SELECT Field1, Field2
+FROM ObjectName
+WHERE Condition
+```
+
+Example:
+
+```apex
+List<Student__c> students = [
+    SELECT Id, Name, CGPA__c, Branch__c, Backlogs__c
+    FROM Student__c
+    WHERE Id = :studentId
+];
+```
+
+The important lesson was that SOQL should be written to answer a **specific business question**, rather than simply demonstrating query syntax.
 
 ---
 
-## 🛠 Technologies & Concepts
+# Business Questions
 
-- Salesforce
-- Apex Programming
-- SOQL
-- DML
-- Service Classes
-- Business Transactions
-- Enterprise Architecture
-- Data Validation
-- Record Management
+During the sprint, I worked on identifying the correct Salesforce object and required information for different business questions.
+
+### Question 1
+
+**Has this student already applied for the selected company?**
+
+Object:
+
+```text
+Application
+```
+
+Required information:
+
+```text
+Student
+Job
+Application Status
+```
+
+### Question 2
+
+**Which companies are currently accepting applications?**
+
+Object:
+
+```text
+Job
+```
+
+Required information:
+
+```text
+Company
+Application Deadline
+```
+
+### Question 3
+
+**How many students have already been selected by Amazon?**
+
+Object:
+
+```text
+Application
+```
+
+Required information:
+
+```text
+Student
+Job
+Application Status
+```
+
+### Question 4
+
+**Which students satisfy Microsoft's eligibility criteria?**
+
+Objects:
+
+```text
+Student
+Job
+```
+
+Required information:
+
+```text
+Student CGPA
+Student Branch
+Student Backlogs
+Job Eligibility Criteria
+```
+
+These exercises helped me understand that a good SOQL query starts with a clear business question.
 
 ---
 
-## 👩‍💻 Author
+# DML
 
-**Bhargavi Mukku**
+## What is DML?
 
-B.Tech – Information Technology
+**DML** stands for **Data Manipulation Language**.
 
-Aspiring Salesforce Developer
+DML is used when Salesforce records need to be created or updated.
+
+Common DML operations include:
+
+```text
+INSERT
+UPDATE
+DELETE
+UPSERT
+```
+
+Examples:
+
+### Insert
+
+```apex
+insert student;
+```
+
+### Update
+
+```apex
+update student;
+```
+
+### Delete
+
+```apex
+delete student;
+```
+
+The sprint introduced DML as the next step after retrieving information, allowing the Placement Management System to store new information and update existing records.
+
+---
+
+# SOQL and DML Flow
+
+The overall concept learned in this sprint can be represented as:
+
+```text
+Business Requirement
+        ↓
+Identify Required Information
+        ↓
+Identify Salesforce Object
+        ↓
+Identify Required Fields
+        ↓
+SOQL
+        ↓
+Retrieve Data
+        ↓
+Apply Business Logic
+        ↓
+Make Decision
+        ↓
+DML
+        ↓
+Create / Update Data
+```
+
+---
+
+# Engineering Principles
+
+### Retrieve Before Deciding
+
+Always retrieve the information required for a decision before applying business logic.
+
+### Every Query Should Answer One Business Question
+
+Before writing SOQL, ask:
+
+```text
+I am writing this query because I need to know...
+```
+
+If the question is not clear, the query should not be written yet.
+
+### Think About Information First
+
+Professional software development begins by understanding the information requirement. The query then becomes the mechanism for retrieving that information.
+
+### Focus on Business Requirements
+
+A query does not need to be clever. It needs to retrieve the correct information consistently and efficiently.
+
+---
+
+# Sprint 5 Workflow
+
+```text
+Business Question
+        ↓
+Information Requirement
+        ↓
+Salesforce Object
+        ↓
+Required Fields
+        ↓
+SOQL Query
+        ↓
+Retrieve Records
+        ↓
+Business Logic
+        ↓
+Decision
+        ↓
+DML Operation
+```
+
+---
+
+# Key Takeaways
+
+* Learned the purpose of SOQL.
+* Learned how to identify the correct object for a business question.
+* Learned how to identify the fields required for a query.
+* Understood the importance of retrieving data before making decisions.
+* Learned the purpose of DML.
+* Understood how SOQL and DML work together.
+* Learned to think about Salesforce data as a business asset.
+* Learned to design queries around business questions.
+
+---
+
+# Sprint Status
+
+| Item     | Details                                               |
+| -------- | ----------------------------------------------------- |
+| Sprint   | Sprint 5                                              |
+| Chapter  | Chapter 5 – Making Software Talk to Data              |
+| Topic    | Retrieving and Managing Information with SOQL and DML |
+| Platform | Salesforce                                            |
+| Status   | ✅ Completed                                           |
+
+---
+
+## Conclusion
+
+Sprint 5 helped me understand how Salesforce applications retrieve and manage information.
+
+The most important concept I learned is:
+
+> **Good software retrieves the right information before making a decision.**
+
+SOQL is used to retrieve the information required by the application, while DML is used when Salesforce records need to be created or modified.
