@@ -1,144 +1,202 @@
+# Sprint 7 – Bulk Processing and Governor Limits
 
-# Building Software That Survives Scale – Sprint 7
+## Overview
 
-## 📖 Overview
+Sprint 7 focused on understanding Salesforce Governor Limits and designing bulk-safe Apex code and Triggers. The primary goal was to build scalable solutions capable of processing large volumes of records efficiently while following Salesforce best practices.
 
-This repository contains my learning notes and exercises from **Sprint 7 – Building Software That Survives Scale**. The sprint focuses on writing scalable Apex code that can efficiently process hundreds of records while staying within Salesforce Governor Limits.
-
-The primary objective is to move from writing code that works for a single record to designing enterprise-level Salesforce applications that safely handle bulk data.
-
----
-
-## 🎯 Learning Objectives
-
-- Understand Salesforce Governor Limits
-- Learn why bulk processing is important
-- Design bulkified Apex code
-- Avoid SOQL inside loops
-- Avoid DML inside loops
-- Process collections using Lists, Sets, and Maps
-- Improve application performance
-- Build scalable Trigger logic
-- Prepare for Salesforce Developer interviews
+The sprint was implemented using the Placement Management System, where Application, Student, and Job records were processed through bulk-safe logic.
 
 ---
 
-## 📚 Topics Covered
+## Objectives
 
-- Governor Limits
-- Bulk Processing
-- Bulkification
-- SOQL Best Practices
-- DML Best Practices
-- Collections in Apex
-  - Lists
-  - Sets
-  - Maps
-- Performance Optimization
-- Engineering Design Thinking
-- Trigger Architecture Basics
+* Understand Salesforce Governor Limits.
+* Learn why code that works for a single record may fail at scale.
+* Understand the concept of Bulkification.
+* Learn to avoid SOQL and DML operations inside loops.
+* Work with Apex Collections such as Lists, Sets, and Maps.
+* Understand Trigger Context Variables.
+* Design scalable Trigger and Service Layer architecture.
+* Implement bulk-safe eligibility validation for applications.
 
 ---
 
-## 🛠 Key Concepts Learned
+## Key Concepts Covered
 
 ### Governor Limits
 
-Understanding why Salesforce limits:
+Salesforce enforces Governor Limits to ensure fair resource usage across all organizations in a multi-tenant environment.
 
-- SOQL Queries
-- DML Statements
-- CPU Time
-- Heap Size
+Important limits studied during this sprint include:
 
-and how to write code within those limits.
-
----
+* SOQL Queries: 100 per transaction
+* DML Statements: 150 per transaction
+* Records Retrieved: 50,000
+* DML Records Processed: 10,000
+* CPU Time Limit: 10,000 ms
 
 ### Bulkification
 
-Learned how to:
+Bulkification is the process of designing Apex code so that it can efficiently process multiple records in a single transaction.
 
-- Process multiple records together
-- Query related records once
-- Perform DML once
-- Reduce database operations
+Instead of writing code for one record at a time, bulkified code processes collections of records using Lists, Sets, and Maps.
+
+### SOQL Inside Loops
+
+Learned why placing SOQL queries inside loops is dangerous and can quickly exceed Governor Limits when processing large datasets.
+
+### DML Inside Loops
+
+Learned why DML statements should not be executed inside loops and how records should instead be collected and updated in a single operation.
 
 ---
 
-### Collection Thinking
+## Apex Collections Used
 
-Instead of:
+### List
 
-```
-One Record
-↓
+Used to store and process multiple records together.
 
-One Query
-↓
-
-One Update
+```apex
+List<Application__c> applications;
 ```
 
-Think:
+### Set
 
+Used to collect unique values and eliminate duplicates.
+
+```apex
+Set<Id> studentIds;
 ```
-Many Records
-↓
 
-Collect IDs
+### Map
 
-↓
+Used for fast record lookup without additional SOQL queries.
 
-One Query
-
-↓
-
-Process in Memory
-
-↓
-
-One DML
+```apex
+Map<Id, Student__c> studentsById;
 ```
 
 ---
 
-## 🚀 Best Practices
+## Bulk Processing Pattern
 
-✔ No SOQL inside loops
+The following pattern was practiced throughout the sprint:
 
-✔ No DML inside loops
-
-✔ Query related records once
-
-✔ Use Sets for unique IDs
-
-✔ Use Maps for quick lookups
-
-✔ Update records in bulk
+1. Receive records from Trigger.new
+2. Collect required Ids
+3. Query related records once
+4. Store results in Maps
+5. Process records in memory
+6. Collect records for update
+7. Perform a single DML operation
 
 ---
 
-## 💡 Skills Gained
+## Trigger Context Variables
 
-- Apex Performance Optimization
-- Bulk-safe Programming
-- Governor Limit Awareness
-- Scalable Application Design
-- Enterprise Coding Practices
+### Trigger.new
+
+Contains the new versions of records being processed.
+
+### Trigger.old
+
+Contains the previous versions of records.
+
+### Trigger.newMap
+
+Provides access to new records using record Ids.
+
+### Trigger.oldMap
+
+Provides access to old records using record Ids.
+
+These context variables were used to detect meaningful business changes and design efficient Trigger logic.
 
 ---
 
-## 📌 Outcome
+## Placement Management System Implementation
 
-After completing this sprint, I can confidently design Apex code that works efficiently for both single-record operations and large-scale data processing.
+### Objects Used
+
+#### Student__c
+
+* CGPA__c
+* Active_Backlogs__c
+* Branch__c
+* Placement_Status__c
+
+#### Job__c
+
+* Minimum_CGPA__c
+* Allowed_Backlogs__c
+* Eligible_Branches__c
+
+#### Application__c
+
+* Student__c
+* Job__c
+* Status__c
+* Application_Date__c
 
 ---
 
-## 👩‍💻 Author
+## Eligibility Validation Design
 
-**Bhargavi Mukku**
+The eligibility validation process was redesigned using bulk-safe principles.
 
-B.Tech Information Technology
+### Process Flow
 
-Aspiring Salesforce Developer
+```text
+Applications
+      ↓
+Collect Student IDs
+      ↓
+Collect Job IDs
+      ↓
+Query Students Once
+      ↓
+Query Jobs Once
+      ↓
+Store Records in Maps
+      ↓
+Validate Applications
+      ↓
+Collect Updates
+      ↓
+Perform Single DML Operation
+```
+
+This approach prevents Governor Limit violations and improves system scalability.
+
+---
+
+## Architecture Learned
+
+The sprint introduced Trigger Handler Architecture to separate business logic from Trigger logic.
+
+```text
+ApplicationTrigger
+        ↓
+ApplicationTriggerHandler
+        ↓
+ApplicationService
+        ↓
+Business Logic
+```
+
+### Benefits
+
+* Better maintainability
+* Improved readability
+* Easier testing
+* Reusable business logic
+* Scalable architecture
+
+---
+
+## Outcome
+
+By the end of Sprint 7, I gained a strong understanding of Salesforce Governor Limits and the importance of designing applications that can scale efficiently. I learned how to process records in bulk using Lists, Sets, and Maps, implement bulk-safe Apex logic, avoid SOQL and DML operations inside loops, and design maintainable Trigger architectures using Handler and Service classes.
+
+I successfully applied these concepts to the Placement Management System by designing eligibility validation processes that can safely handle large volumes of Application, Student, and Job records while following Salesforce best practices for performance, scalability, and maintainability.
