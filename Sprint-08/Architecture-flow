@@ -1,1 +1,63 @@
+                    Recruitment Management System
 
+                               User
+                                │
+                                ▼
+                    Application Submitted
+                                │
+                                ▼
+                      ApplicationService
+                                │
+        ┌───────────────────────┼───────────────────────┐
+        │                       │                       │
+        ▼                       ▼                       ▼
+
+ Queueable Apex          Future Method           Batch Apex
+        │                       │                       │
+        ▼                       ▼                       ▼
+
+ApplicationPost      ApplicationFuture      ApplicationBatchJob
+ProcessingJob            Service
+
+        │
+        ▼
+
+Background Processing
+(Application Validation,
+Analytics, Logging)
+
+        │
+        ▼
+
+ Queueable Chaining
+        │
+        ▼
+
+ExternalApplicationSyncJob
+        │
+        ▼
+
+ApplicationNotificationJob
+        │
+        ▼
+
+Notification Sent
+
+
+────────────────────────────────────────────────────────
+
+                  Scheduled Apex
+
+                   JobScheduler
+                         │
+                         ▼
+
+             Runs Every Day (6 AM)
+                         │
+                         ▼
+
+             Check Expired Job Postings
+                         │
+                         ▼
+
+                Generate Debug Logs
