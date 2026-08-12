@@ -1,95 +1,142 @@
-# 🚀 Salesforce Sprint 11 – Crossing the Salesforce Boundary
+# Sprint 11 - External Recruitment Integration
 
-## About This Sprint
+## Overview
 
-Sprint 11 introduced me to the world of Salesforce Integrations and External Systems. Until this sprint, most of the applications I built operated completely inside Salesforce using Objects, Apex, SOQL, Triggers, Flows, Queueable Apex, and Lightning Web Components.
+In Sprint 11, I implemented integration between the Salesforce Placement Management System and an external recruitment platform. The objective was to learn how Salesforce communicates with external systems using REST APIs, Named Credentials, Queueable Apex, and Triggers.
 
-In this sprint, I learned that enterprise applications rarely work in isolation. Organizations use multiple software systems, and Salesforce must communicate with those systems securely and efficiently. This sprint helped me understand how Salesforce exchanges information with external applications using APIs and web services.
+## Features Implemented
 
-I also explored how real-world systems share data, authenticate requests, process responses, and maintain reliable communication between different platforms.
+### External Credential
 
----
+Created an External Credential to manage authentication settings securely for external API communication.
 
-## What I Learned
+**Configuration**
 
-During this sprint, I learned:
+* Label: Recruitment External Credential
+* Name: Recruitment_External_Credential
+* Authentication Protocol: No Authentication
 
-- Salesforce Integrations
-- APIs and Web Services
-- REST API Fundamentals
-- HTTP Methods (GET, POST, PUT, PATCH, DELETE)
-- Request and Response Architecture
-- JSON Data Format
-- Apex Callouts
-- External System Communication
-- Named Credentials
-- Authentication and Authorization
-- Salesforce Connect
-- External Objects
-- Integration Architecture
-- Synchronous vs Asynchronous Integrations
-- Error Handling in Integrations
+### Named Credential
 
----
+Created a Named Credential to store the external API endpoint and simplify HTTP callouts from Apex.
 
-## Hands-on Activities
+**Configuration**
 
-As part of the sprint activities, I:
+* Label: Recruitment API
+* Name: Recruitment_API
+* URL: https://jsonplaceholder.typicode.com
 
-- Explored Salesforce Integration Architecture
-- Understood how APIs enable communication between systems
-- Learned to read and understand JSON structures
-- Studied HTTP request and response flows
-- Practiced REST API concepts
-- Learned the purpose of Apex Callouts
-- Explored Named Credentials for secure integrations
-- Understood Authentication and Authorization concepts
-- Analyzed real-world recruitment system integration scenarios
-- Learned when to use synchronous and asynchronous integrations
-- Explored External Objects and Salesforce Connect
+### Custom Fields Added
 
----
+The following fields were added to the Application__c object to track integration activity:
 
-## Key Takeaways
+| Field Name               | Data Type      |
+| ------------------------ | -------------- |
+| Integration Status       | Picklist       |
+| External Candidate Id    | Text           |
+| Last Integration Attempt | Date/Time      |
+| Integration Error        | Long Text Area |
 
-One of the biggest lessons from this sprint was understanding that modern business applications do not operate independently. Different systems need a structured and secure way to exchange information.
+### Queueable Apex Implementation
 
-I learned that APIs act as contracts between systems. Salesforce and external applications do not need to know each other's internal implementation details; they only need to follow an agreed communication format.
+Developed a Queueable Apex class named **CandidateSyncQueueable** to perform asynchronous HTTP callouts.
 
-Another important takeaway was understanding the role of authentication, security, and error handling in enterprise integrations. Building an integration is not just about sending data—it is also about ensuring reliability, maintainability, and scalability.
+Responsibilities:
 
----
+* Retrieve application information
+* Prepare JSON payload
+* Send data to external API
+* Process API response
+* Update integration status fields
 
-## Skills Gained
+### Trigger Implementation
 
-- Salesforce Integrations
-- REST APIs
-- JSON Processing
-- Apex Callouts
-- HTTP Protocol
-- Named Credentials
-- Authentication Concepts
-- Authorization Concepts
-- Salesforce Connect
-- External Objects
-- API Communication
-- Integration Design
-- Enterprise Application Architecture
+Created **ApplicationTrigger** to automatically invoke the Queueable Apex class when an application's status changes to **Selected**.
 
----
+Workflow:
+
+Application Status Updated → Trigger Executes → Queueable Job Created → External API Callout → Integration Status Updated
+
+## Concepts Learned
+
+### REST API
+
+REST APIs allow Salesforce to communicate with external systems using HTTP methods such as:
+
+* GET
+* POST
+* PUT
+* PATCH
+* DELETE
+
+### HTTP Callouts
+
+Used Apex HTTP classes:
+
+* HttpRequest
+* HttpResponse
+* Http
+
+to send and receive data from external systems.
+
+### Named Credentials
+
+Named Credentials provide a secure method for storing endpoint URLs and authentication details without hardcoding them in Apex code.
+
+### Queueable Apex
+
+Queueable Apex allows long-running operations such as callouts to execute asynchronously in the background.
+
+### Integration Status Tracking
+
+Implemented status tracking using the following values:
+
+* Pending
+* Sent
+* Failed
+* Retry Required
+
+This helps monitor communication with external systems and simplifies troubleshooting.
+
+## Architecture
+
+Placement Application
+
+↓
+
+Application Trigger
+
+↓
+
+CandidateSyncQueueable
+
+↓
+
+Named Credential
+
+↓
+
+External REST API
+
+↓
+
+Integration Status Update
 
 ## Outcome
 
-By completing Sprint 11, I gained a strong understanding of how Salesforce communicates with external systems through APIs and integrations. I learned the fundamentals of REST architecture, JSON data exchange, Apex Callouts, and secure communication practices.
+Successfully implemented a basic external system integration using Salesforce best practices. This sprint provided hands-on experience with REST APIs, Named Credentials, Queueable Apex, Triggers, HTTP Callouts, and integration monitoring.
 
-This sprint expanded my understanding of enterprise application development and prepared me for building Salesforce solutions that interact with external platforms and services.
+## Technologies Used
 
----
-
-## Author
-
-**Bhargavi Mukku**
-
-B.Tech – Information Technology
-
-Aspiring Salesforce Developer
+* Salesforce Platform
+* Apex
+* Queueable Apex
+* Triggers
+* REST API
+* HTTP Callouts
+* Named Credentials
+* External Credentials
+* SOQL
+* DML Operations
+* VS Code
+* Salesforce CLI
