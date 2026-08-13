@@ -1,91 +1,144 @@
-# 🚀 Salesforce Interview Readiness Bootcamp – Day 3
+# Day 3 – Salesforce Automation with Flow and Validation Rules
 
-## Lightning Web Components (LWC)
+## Objective
 
-## About This Bootcamp
-
-On Day 3 of the Salesforce Interview Readiness Bootcamp, I learned the basics of **Lightning Web Components (LWC)**, Salesforce's modern framework for building user interfaces. Until this point, I had mainly worked with the backend using Apex, SOQL, Triggers, and business logic. This session helped me understand how these backend components connect with a user-friendly interface.
-
-I explored the structure of an LWC, learned how to deploy a component to a Lightning Page, and built simple interactive components using HTML, JavaScript, and data binding.
+The objective of this task was to automate business processes in Salesforce using Record-Triggered Flows and Validation Rules. The implementation was carried out on the **Issue Record** object in the Employee Leave Management / Library Management application.
 
 ---
 
-## What I Learned
+## Tasks Completed
 
-During this session, I learned:
+### 1. Record-Triggered Flow Creation
 
-- What Lightning Web Components (LWC) are
-- Why Salesforce introduced LWC
-- The difference between LWC and Aura Components
-- Structure of an LWC
-- Purpose of HTML, JavaScript, and Meta XML files
-- Data Binding
-- Handling button click events
-- Deploying components using Lightning App Builder
-- Understanding how LWC communicates with Apex
+Created a **Before-Save Record-Triggered Flow** on the **Issue Record** object.
 
----
+**Flow Details**
 
-## Hands-on Activities
+* Object: Issue Record
+* Trigger: A record is created
+* Optimization: Fast Field Updates (Before Save)
+* Flow Name: Auto Set Issued Date
 
-As part of the practical session, I:
+### Flow Logic
 
-- Created my first Lightning Web Component
-- Displayed a welcome message on a Lightning Page
-- Created and displayed student details using JavaScript variables
-- Practiced data binding by updating values dynamically
-- Created buttons to display welcome messages and update application status
-- Built the first screen of a simple Placement Management Portal
-- Deployed the component using Lightning App Builder
+When a new Issue Record is created:
 
----
+* If the Issued Date is left blank,
+* The flow automatically sets the Issued Date to the current date.
 
-## Project Features
+### Assignment Configuration
 
-The Placement Portal includes:
+* Variable: `$Record.Issued_Date__c`
+* Operator: Equals
+* Value: `$Flow.CurrentDate`
 
-- Welcome Banner
-- Student Information
-- Application Status
-- Company Count
-- Job Count
-- Applications Submitted
-- Interactive Buttons
-- Dynamic UI using JavaScript
+### Outcome
+
+The Issued Date is automatically populated with today's date when a new Issue Record is saved.
 
 ---
 
-## Key Takeaways
+### 2. Flow Testing
 
-This session helped me understand that **LWC is responsible for building the user interface**, while Apex handles the business logic and database operations. Keeping the frontend and backend separate makes Salesforce applications easier to maintain and scale.
+A new Issue Record was created with:
 
-I also learned how data binding allows the UI to update automatically whenever the JavaScript variables change, making applications more interactive and user-friendly.
+* Book selected
+* Member selected
+* Issued Date left blank
 
----
+**Result**
 
-## Skills Gained
-
-- Lightning Web Components (LWC)
-- HTML
-- JavaScript
-- Lightning App Builder
-- Data Binding
-- Event Handling
-- Component Deployment
-- Salesforce UI Development
+* Record saved successfully.
+* Issued Date was automatically populated with the current date.
 
 ---
 
-## Outcome
+### 3. Validation Rules Creation
 
-After completing Day 3, I can confidently create basic Lightning Web Components, deploy them to Lightning Pages, work with data binding, and build interactive user interfaces. This session provided a strong foundation for connecting LWC with Apex and Salesforce data in future projects.
+#### Validation Rule 1 – Due Date Validation
+
+**Purpose**
+Prevent users from entering a Due Date earlier than the Issued Date.
+
+**Formula**
+
+```text
+Due_Date__c < Issued_Date__c
+```
+
+**Error Message**
+
+```text
+Due Date cannot be before Issued Date.
+```
 
 ---
 
-## Author
+#### Validation Rule 2 – Book Required
 
-**Bhargavi Mukku**
+**Purpose**
+Ensure that a Book is selected before saving an Issue Record.
 
-B.Tech – Information Technology
+**Formula**
 
-Aspiring Salesforce Developer
+```text
+ISBLANK(Books__c)
+```
+
+**Error Message**
+
+```text
+Please select a Book.
+```
+
+---
+
+#### Validation Rule 3 – Member Required
+
+**Purpose**
+Ensure that a Member is selected before saving an Issue Record.
+
+**Formula**
+
+```text
+ISBLANK(Member__c)
+```
+
+**Error Message**
+
+```text
+Please select a Member.
+```
+
+---
+
+## Testing Results
+
+### Flow Testing
+
+✔ Issued Date automatically populated with the current date.
+
+### Validation Rule Testing
+
+✔ Due Date cannot be earlier than Issued Date.
+
+✔ Book field is mandatory.
+
+✔ Member field is mandatory.
+
+---
+
+## Key Learnings
+
+* Understood the difference between Before-Save and After-Save Flows.
+* Learned how to create Record-Triggered Flows.
+* Automated field updates using Flow Assignments.
+* Implemented business validations using Validation Rules.
+* Tested and verified Salesforce automation functionality.
+* Gained hands-on experience with declarative automation tools in Salesforce.
+
+---
+
+## Conclusion
+
+Successfully implemented Salesforce automation on the Issue Record object using Record-Triggered Flows and Validation Rules. The solution ensures automatic population of Issued Date and maintains data quality by enforcing mandatory fields and date validations.
