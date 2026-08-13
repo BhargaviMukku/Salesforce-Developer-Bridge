@@ -1,77 +1,191 @@
-# 🚀 Salesforce Interview Readiness Bootcamp – Day 2
+# Sprint 2 – Apex Fundamentals, Governor Limits, Bulkification & Asynchronous Apex
 
-## Apex Triggers & Governor Limits
+## Overview
 
-## About This Bootcamp
-
-On Day 2 of the Salesforce Interview Readiness Bootcamp, I focused on understanding **Apex Triggers** and how they are used to automate business processes in Salesforce. I also learned why Governor Limits are important and how to write efficient, bulkified code that follows Salesforce best practices.
-
-As part of the assignment, I worked on a real-world Placement Management System scenario where I implemented business rules using an Apex Trigger. The goal was to validate student applications, prevent duplicate records, and automatically update application status while ensuring the code could handle bulk data efficiently.
+In this sprint, I learned the core concepts of Apex programming and Salesforce development. I explored Apex Collections such as Lists, Sets, and Maps, practiced loops, understood Salesforce Governor Limits, implemented bulkification techniques, and worked with Asynchronous Apex using Future Methods. I also learned how to monitor asynchronous jobs through Apex Jobs.
 
 ---
 
-## What I Learned
+## Apex Collections
 
-During this session, I learned:
+### List Example
 
-- What an Apex Trigger is
-- Difference between Before Trigger and After Trigger
-- When to use Validation Rules, Flow, and Triggers
-- Trigger Context Variables
-- Governor Limits and why they exist
-- Bulkification techniques
-- Using Lists, Sets, and Maps in Apex
-- Trigger Handler Pattern
-- Writing clean and maintainable Apex code
+```apex
+List<String> cities = new List<String>();
+
+cities.add('Delhi');
+cities.add('Bhimavaram');
+cities.add('Mumbai');
+cities.add('Eluru');
+cities.add('Guntur');
+
+for(String city : cities)
+{
+    System.debug(city.toUpperCase());
+}
+```
+
+### Set Example
+
+```apex
+Set<String> branches = new Set<String>();
+
+branches.add('IT');
+branches.add('CSE');
+branches.add('ECE');
+branches.add('IT');
+
+System.debug(branches);
+```
+
+### Map Example
+
+```apex
+Map<Integer,String> students = new Map<Integer,String>();
+
+students.put(1,'Bhargavi');
+students.put(2,'Teja');
+students.put(3,'Siri');
+
+System.debug(students.get(1));
+```
 
 ---
 
-## Hands-on Activities
+## Governor Limits & Bulkification
 
-As part of the practical assignment, I:
+### Bad Trigger (SOQL Inside Loop)
 
-- Created an **ApplicationTrigger**
-- Prevented duplicate job applications
-- Validated student CGPA against job eligibility
-- Checked application deadlines
-- Automatically assigned the status as **"Applied"**
-- Added meaningful validation error messages
-- Bulkified the trigger using Lists, Sets, and Maps
-- Analyzed and improved inefficient trigger code
+```apex
+trigger MemberTrigger on Members__c(after insert) {
 
----
+    for(Members__c mem : Trigger.new)
+    {
+        List<Members__c> members = [
+            SELECT Id, Name
+            FROM Members__c
+        ];
 
-## Key Takeaways
+        System.debug(members.size());
+    }
 
-One of the biggest lessons I learned was that a trigger should not only satisfy business requirements but also be designed to handle large amounts of data efficiently. I understood why SOQL and DML statements should never be placed inside loops and how bulkification helps applications stay within Salesforce Governor Limits.
+}
+```
 
-I also learned that choosing between a Validation Rule, Flow, and Trigger depends on the business requirement, and that Apex should only be used when declarative tools cannot solve the problem.
+### Governor Limit Error
 
----
+```text
+System.LimitException: Too many SOQL queries: 101
+```
 
-## Skills Gained
+### Bulkified Trigger
 
-- Apex Triggers
-- Trigger Context Variables
+```apex
+trigger MemberTrigger on Members__c (after insert) {
+
+    List<Members__c> members = [
+        SELECT Id, Name
+        FROM Members__c
+    ];
+
+    System.debug('Total Members : ' + members.size());
+
+    for(Members__c mem : Trigger.new)
+    {
+        System.debug(mem.Name);
+    }
+
+}
+```
+
+### Concepts Learned
+
+- Salesforce Multi-Tenant Architecture
 - Governor Limits
+- SOQL Query Limits
+- DML Limits
 - Bulkification
-- Lists, Sets, and Maps
-- Trigger Handler Pattern
-- Business Logic Implementation
-- Salesforce Best Practices
+- Apex Best Practices
+
+---
+
+## Asynchronous Apex
+
+### Future Method
+
+```apex
+public class FutureMemberClass {
+
+    @future
+    public static void updateMember(Id memberId)
+    {
+        Members__c member = [
+            SELECT Id, Name
+            FROM Members__c
+            WHERE Id = :memberId
+            LIMIT 1
+        ];
+
+        member.Name = member.Name + ' Updated';
+
+        update member;
+
+        System.debug('Future Method Executed');
+    }
+}
+```
+
+### Execute Anonymous
+
+```apex
+Members__c member = [
+    SELECT Id
+    FROM Members__c
+    LIMIT 1
+];
+
+FutureMemberClass.updateMember(member.Id);
+```
+
+### Verification
+
+- Executed Future Method asynchronously
+- Verified execution through Apex Jobs
+- Confirmed successful record update
+
+---
+
+## Difference Between Future Method and Queueable Apex
+
+| Future Method | Queueable Apex |
+|--------------|---------------|
+| Uses @future annotation | Implements Queueable interface |
+| Supports primitive parameters only | Supports complex objects and sObjects |
+| Cannot chain jobs | Supports job chaining |
+| Suitable for simple background tasks | Suitable for complex asynchronous processing |
+
+---
+
+## Why Use Batch Apex Instead of a Trigger?
+
+Triggers process records in a single transaction and may hit governor limits when handling large volumes of data. Batch Apex processes records in smaller batches, with each batch running as a separate transaction. This allows Salesforce to efficiently process thousands or millions of records while avoiding governor limit exceptions.
+
+---
+
+## Key Learnings
+
+- Apex Collections (List, Set, Map)
+- For Loops and Enhanced For Loops
+- Governor Limits
+- SOQL and DML Best Practices
+- Bulkification Techniques
+- Asynchronous Apex
+- Future Methods
+- Queueable Apex Basics
+- Apex Jobs Monitoring
 
 ---
 
 ## Outcome
 
-After completing Day 2, I gained confidence in writing bulk-safe Apex Triggers that automate business processes while following Salesforce best practices. This session also improved my understanding of trigger architecture and prepared me for explaining trigger concepts confidently during Salesforce interviews.
-
----
-
-## Author
-
-**Bhargavi Mukku**
-
-B.Tech – Information Technology
-
-Aspiring Salesforce Developer
+Successfully implemented Apex collection operations, demonstrated governor limit violations and bulkification techniques, created and executed a Future Method, monitored asynchronous execution using Apex Jobs, and gained practical experience with Salesforce Apex development best practices.
